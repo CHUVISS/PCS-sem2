@@ -1,0 +1,295 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="NetworkAnalyzer.MainWindow"
+        Title="Анализатор сетевых подключений"
+        Width="1100" Height="740"
+        Background="#1E1E2E"
+        FontFamily="Inter,Segoe UI,Arial"
+        FontSize="13">
+
+  <Window.Styles>
+
+    <!-- Карточка -->
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="#2A2A3E"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="12"/>
+      <Setter Property="Margin" Value="4"/>
+    </Style>
+
+    <!-- Кнопка основная -->
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="#89B4FA"/>
+      <Setter Property="Foreground" Value="#1E1E2E"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="14 8"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#B4BEFE"/>
+    </Style>
+
+    <!-- Кнопка ping -->
+    <Style Selector="Button.ping">
+      <Setter Property="Background" Value="#A6E3A1"/>
+      <Setter Property="Foreground" Value="#1E1E2E"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="14 8"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <!-- Кнопка danger -->
+    <Style Selector="Button.danger">
+      <Setter Property="Background" Value="#F38BA8"/>
+      <Setter Property="Foreground" Value="#1E1E2E"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="8 4"/>
+      <Setter Property="CornerRadius" Value="5"/>
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <!-- TextBox -->
+    <Style Selector="TextBox.input">
+      <Setter Property="Background" Value="#313244"/>
+      <Setter Property="Foreground" Value="#CDD6F4"/>
+      <Setter Property="CaretBrush" Value="#CDD6F4"/>
+      <Setter Property="BorderBrush" Value="#45475A"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Padding" Value="8 6"/>
+    </Style>
+
+    <!-- ListBox -->
+    <Style Selector="ListBox.dark">
+      <Setter Property="Background" Value="#313244"/>
+      <Setter Property="BorderBrush" Value="#45475A"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Padding" Value="4"/>
+    </Style>
+    <Style Selector="ListBox.dark ListBoxItem">
+      <Setter Property="Foreground" Value="#CDD6F4"/>
+      <Setter Property="Padding" Value="8 5"/>
+      <Setter Property="CornerRadius" Value="4"/>
+    </Style>
+    <Style Selector="ListBox.dark ListBoxItem:selected /template/ ContentPresenter">
+      <Setter Property="Background" Value="#45475A"/>
+    </Style>
+    <Style Selector="ListBox.dark ListBoxItem:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#3D3F53"/>
+    </Style>
+
+    <!-- TabItem -->
+    <Style Selector="TabItem">
+      <Setter Property="Foreground" Value="#6C7086"/>
+      <Setter Property="Padding" Value="14 8"/>
+      <Setter Property="FontSize" Value="13"/>
+    </Style>
+    <Style Selector="TabItem:selected">
+      <Setter Property="Foreground" Value="#89B4FA"/>
+    </Style>
+
+  </Window.Styles>
+
+  <Grid Margin="12">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Шапка -->
+    <Border Grid.Row="0" Classes="card" Margin="4 4 4 8">
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="🌐" FontSize="22" VerticalAlignment="Center" Margin="0 0 10 0"/>
+        <StackPanel>
+          <TextBlock Text="Анализатор сетевых подключений"
+                     FontSize="18" FontWeight="Bold" Foreground="#89B4FA"/>
+          <TextBlock Text="Программирование корпоративных систем · Практическое занятие №2"
+                     Foreground="#6C7086" FontSize="11"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Тело -->
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="270"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- Левая панель -->
+      <Grid Grid.Column="0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Classes="card">
+          <StackPanel Spacing="8">
+            <TextBlock Text="СЕТЕВЫЕ ИНТЕРФЕЙСЫ" Foreground="#89B4FA"
+                       FontSize="11" FontWeight="SemiBold"/>
+            <Button Classes="primary" Content="↻  Обновить список"
+                    Click="BtnRefresh_Click" HorizontalAlignment="Stretch"/>
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Row="1" Classes="card">
+          <ListBox x:Name="ListInterfaces" Classes="dark"
+                   SelectionChanged="ListInterfaces_SelectionChanged"/>
+        </Border>
+
+        <Border Grid.Row="2" Classes="card">
+          <StackPanel Spacing="6">
+            <TextBlock Text="СТАТУС" Foreground="#89B4FA"
+                       FontSize="11" FontWeight="SemiBold"/>
+            <Border Background="#313244" CornerRadius="4" Padding="6 4">
+              <TextBlock x:Name="TxtStatus" Text="Выберите интерфейс"
+                         Foreground="#6C7086" FontSize="12" TextWrapping="Wrap"/>
+            </Border>
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- Правая панель: табы -->
+      <TabControl Grid.Column="1" Margin="4 0 0 0"
+                  Background="Transparent">
+
+        <!-- ─── Таб: Интерфейс ─── -->
+        <TabItem Header="📡  Интерфейс">
+          <Border Background="#2A2A3E" CornerRadius="0 8 8 8" Padding="16">
+            <ScrollViewer>
+              <StackPanel Spacing="6">
+                <TextBlock Text="ИНФОРМАЦИЯ ОБ ИНТЕРФЕЙСЕ"
+                           Foreground="#89B4FA" FontSize="11" FontWeight="SemiBold"
+                           Margin="0 0 0 8"/>
+
+                <!-- Таблица полей -->
+                <Grid ColumnDefinitions="160,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfName" Grid.Row="0" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4" TextWrapping="Wrap"/>
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Тип:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfType" Grid.Row="1" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4" TextWrapping="Wrap"/>
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text="MAC-адрес:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfMac" Grid.Row="2" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4"/>
+
+                  <TextBlock Grid.Row="3" Grid.Column="0" Text="IP-адрес:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfIp" Grid.Row="3" Grid.Column="1" Foreground="#A6E3A1" Margin="0 4" TextWrapping="Wrap"/>
+
+                  <TextBlock Grid.Row="4" Grid.Column="0" Text="Маска подсети:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfMask" Grid.Row="4" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4"/>
+
+                  <TextBlock Grid.Row="5" Grid.Column="0" Text="Шлюз:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfGateway" Grid.Row="5" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4" TextWrapping="Wrap"/>
+
+                  <TextBlock Grid.Row="6" Grid.Column="0" Text="Состояние:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfStatus" Grid.Row="6" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4"/>
+
+                  <TextBlock Grid.Row="7" Grid.Column="0" Text="Скорость:" Foreground="#6C7086" Margin="0 4"/>
+                  <TextBlock x:Name="TxtIfSpeed" Grid.Row="7" Grid.Column="1" Foreground="#CDD6F4" Margin="0 4"/>
+                </Grid>
+
+                <Rectangle Height="1" Fill="#45475A" Margin="0 10"/>
+
+                <TextBlock Text="DNS-СЕРВЕРЫ" Foreground="#89B4FA"
+                           FontSize="11" FontWeight="SemiBold" Margin="0 0 0 4"/>
+                <TextBlock x:Name="TxtIfDns" Foreground="#CDD6F4"
+                           Text="—" TextWrapping="Wrap"/>
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+        </TabItem>
+
+        <!-- ─── Таб: Анализ URL ─── -->
+        <TabItem Header="🔗  Анализ URL">
+          <Border Background="#2A2A3E" CornerRadius="0 8 8 8" Padding="16">
+            <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+
+              <TextBlock Grid.Row="0" Text="АНАЛИЗ URL / URI"
+                         Foreground="#89B4FA" FontSize="11" FontWeight="SemiBold"
+                         Margin="0 0 0 8"/>
+
+              <!-- Строка ввода -->
+              <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="0 0 0 12">
+                <TextBox x:Name="TxtUrl" Grid.Column="0" Classes="input"
+                         Text="https://example.com:8080/path/page?param1=value1&amp;param2=value2#section"
+                         KeyDown="TxtUrl_KeyDown"/>
+                <Button Grid.Column="1" Classes="primary" Content="Анализировать"
+                        Margin="6 0 0 0" Click="BtnAnalyze_Click"/>
+                <Button x:Name="BtnPing" Grid.Column="2" Classes="ping" Content="Ping"
+                        Margin="6 0 0 0" Click="BtnPing_Click"/>
+              </Grid>
+
+              <!-- Компоненты URL -->
+              <Border Grid.Row="2" Background="#313244" CornerRadius="6"
+                      Padding="12" Margin="0 0 0 12">
+                <Grid ColumnDefinitions="170,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Схема (протокол):" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriScheme" Grid.Row="0" Grid.Column="1" Foreground="#A6E3A1" Margin="0 3"/>
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Хост:" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriHost" Grid.Row="1" Grid.Column="1" Foreground="#89B4FA" Margin="0 3"/>
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Порт:" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriPort" Grid.Row="2" Grid.Column="1" Foreground="#F9E2AF" Margin="0 3"/>
+
+                  <TextBlock Grid.Row="3" Grid.Column="0" Text="Путь:" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriPath" Grid.Row="3" Grid.Column="1" Foreground="#CDD6F4" Margin="0 3"/>
+
+                  <TextBlock Grid.Row="4" Grid.Column="0" Text="Параметры запроса:" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriQuery" Grid.Row="4" Grid.Column="1" Foreground="#CBA6F7" Margin="0 3" TextWrapping="Wrap"/>
+
+                  <TextBlock Grid.Row="5" Grid.Column="0" Text="Фрагмент:" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriFragment" Grid.Row="5" Grid.Column="1" Foreground="#FAB387" Margin="0 3"/>
+
+                  <TextBlock Grid.Row="6" Grid.Column="0" Text="Тип адреса:" Foreground="#6C7086" Margin="0 3"/>
+                  <TextBlock x:Name="TxtUriAddrType" Grid.Row="6" Grid.Column="1" Foreground="#CDD6F4" Margin="0 3"/>
+                </Grid>
+              </Border>
+
+              <!-- Результаты -->
+              <Border Grid.Row="3" Background="#313244" CornerRadius="6" Padding="12">
+                <StackPanel>
+                  <TextBlock Text="РЕЗУЛЬТАТЫ ПРОВЕРКИ" Foreground="#89B4FA"
+                             FontSize="11" FontWeight="SemiBold" Margin="0 0 0 6"/>
+                  <TextBox x:Name="TxtResults"
+                           Background="Transparent" BorderThickness="0"
+                           Foreground="#CDD6F4" FontFamily="Menlo,Consolas,monospace" FontSize="12"
+                           IsReadOnly="True" TextWrapping="Wrap"
+                           Text="Введите URL и нажмите 'Анализировать' или 'Ping'"/>
+                </StackPanel>
+              </Border>
+
+              <!-- История -->
+              <Border Grid.Row="4" Classes="card" Margin="0 8 0 0">
+                <StackPanel Spacing="6">
+                  <Grid>
+                    <TextBlock Text="ИСТОРИЯ ПРОВЕРОК" Foreground="#89B4FA"
+                               FontSize="11" FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                    <Button Classes="danger" Content="Очистить"
+                            HorizontalAlignment="Right"
+                            Click="BtnClearHistory_Click"/>
+                  </Grid>
+                  <ListBox x:Name="ListHistory" Classes="dark"
+                           MaxHeight="90"
+                           SelectionChanged="ListHistory_SelectionChanged"/>
+                </StackPanel>
+              </Border>
+
+            </Grid>
+          </Border>
+        </TabItem>
+
+      </TabControl>
+    </Grid>
+  </Grid>
+
+</Window>
