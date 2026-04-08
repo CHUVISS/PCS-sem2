@@ -1,0 +1,91 @@
+# ========================
+# .NET & Build Outputs
+# ========================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+*.dll
+*.exe
+*.pdb
+*.log
+*.diagsession
+*.deps.json
+*.runtimeconfig.json
+
+# ========================
+# IDE & Editor Files
+# ========================
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj.user
+*.vbproj.user
+*.fsproj.user
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.iml
+riderModule.iml
+
+# Visual Studio Code
+.vscode/
+
+# ========================
+# NuGet & Packages
+# ========================
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+global.json
+
+# ========================
+# Test & Coverage
+# ========================
+[Tt]est[Rr]esults*/
+[Bb]uild[Ll]og.*
+*.trx
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# ========================
+# Avalonia / XAML Designer
+# ========================
+*.axaml.bak
+*.xaml.bak
+*.axml.cs.bak
+
+# ========================
+# OS & Temp Files
+# ========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Swap/Backup
+*.swp
+*~
