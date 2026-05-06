@@ -1,0 +1,217 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ═══ Color palette ═══════════════════════════════════════════════ -->
+  <Style Selector=":is(Control)">
+    <Style.Resources>
+      <Color x:Key="BgBase">#0A0C10</Color>
+      <Color x:Key="BgSurface">#10141C</Color>
+      <Color x:Key="BgElevated">#161B27</Color>
+      <Color x:Key="BgCard">#1C2232</Color>
+      <Color x:Key="Border">#252D3D</Color>
+      <Color x:Key="TextPrimary">#E2E8F0</Color>
+      <Color x:Key="TextSecondary">#64748B</Color>
+      <Color x:Key="TextMuted">#374151</Color>
+      <Color x:Key="AccentBlue">#3B82F6</Color>
+      <Color x:Key="AccentPurple">#8B5CF6</Color>
+      <Color x:Key="AccentGreen">#10B981</Color>
+      <Color x:Key="AccentRed">#EF4444</Color>
+      <SolidColorBrush x:Key="BgBaseBrush">#0A0C10</SolidColorBrush>
+      <SolidColorBrush x:Key="BgSurfaceBrush">#10141C</SolidColorBrush>
+      <SolidColorBrush x:Key="BgElevatedBrush">#161B27</SolidColorBrush>
+      <SolidColorBrush x:Key="BgCardBrush">#1C2232</SolidColorBrush>
+      <SolidColorBrush x:Key="BorderBrush">#252D3D</SolidColorBrush>
+      <SolidColorBrush x:Key="TextPrimaryBrush">#E2E8F0</SolidColorBrush>
+      <SolidColorBrush x:Key="TextSecondaryBrush">#64748B</SolidColorBrush>
+      <SolidColorBrush x:Key="AccentBlueBrush">#3B82F6</SolidColorBrush>
+      <SolidColorBrush x:Key="AccentPurpleBrush">#8B5CF6</SolidColorBrush>
+      <SolidColorBrush x:Key="AccentGreenBrush">#10B981</SolidColorBrush>
+    </Style.Resources>
+  </Style>
+
+  <!-- ═══ Window ═══════════════════════════════════════════════════════ -->
+  <Style Selector="Window">
+    <Setter Property="Background" Value="#0A0C10"/>
+    <Setter Property="FontFamily" Value="SF Pro Display, -apple-system, Helvetica Neue, sans-serif"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+  </Style>
+
+  <!-- ═══ Card panel ═══════════════════════════════════════════════════ -->
+  <Style Selector="Border.card">
+    <Setter Property="Background" Value="#1C2232"/>
+    <Setter Property="CornerRadius" Value="12"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="#252D3D"/>
+    <Setter Property="Padding" Value="20"/>
+  </Style>
+
+  <Style Selector="Border.card-sm">
+    <Setter Property="Background" Value="#161B27"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="#252D3D"/>
+    <Setter Property="Padding" Value="14 10"/>
+  </Style>
+
+  <!-- ═══ TextBlock ════════════════════════════════════════════════════ -->
+  <Style Selector="TextBlock.h1">
+    <Setter Property="FontSize" Value="22"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+    <Setter Property="LetterSpacing" Value="-0.5"/>
+  </Style>
+
+  <Style Selector="TextBlock.h2">
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Foreground" Value="#64748B"/>
+    <Setter Property="LetterSpacing" Value="1.5"/>
+  </Style>
+
+  <Style Selector="TextBlock.label">
+    <Setter Property="FontSize" Value="11"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+    <Setter Property="Foreground" Value="#475569"/>
+    <Setter Property="LetterSpacing" Value="0.8"/>
+  </Style>
+
+  <Style Selector="TextBlock.mono">
+    <Setter Property="FontFamily" Value="SF Mono, JetBrains Mono, Menlo, monospace"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Foreground" Value="#94A3B8"/>
+  </Style>
+
+  <Style Selector="TextBlock.stat-value">
+    <Setter Property="FontSize" Value="28"/>
+    <Setter Property="FontWeight" Value="Light"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+    <Setter Property="LetterSpacing" Value="-1"/>
+  </Style>
+
+  <!-- ═══ TextBox ══════════════════════════════════════════════════════ -->
+  <Style Selector="TextBox">
+    <Setter Property="Background" Value="#161B27"/>
+    <Setter Property="BorderBrush" Value="#252D3D"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+    <Setter Property="CaretBrush" Value="#3B82F6"/>
+    <Setter Property="SelectionBrush" Value="#1D4ED8"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="12 8"/>
+    <Setter Property="FontFamily" Value="SF Mono, JetBrains Mono, Menlo, monospace"/>
+    <Setter Property="FontSize" Value="13"/>
+  </Style>
+
+  <Style Selector="TextBox:focus">
+    <Setter Property="BorderBrush" Value="#3B82F6"/>
+  </Style>
+
+  <Style Selector="TextBox:pointerover">
+    <Setter Property="BorderBrush" Value="#374151"/>
+  </Style>
+
+  <!-- ═══ Buttons ══════════════════════════════════════════════════════ -->
+  <Style Selector="Button">
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="16 9"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.15"/>
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="#3B82F6"/>
+    <Setter Property="Foreground" Value="#FFFFFF"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#2563EB"/>
+  </Style>
+
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#1D4ED8"/>
+  </Style>
+
+  <Style Selector="Button.danger">
+    <Setter Property="Background" Value="#EF4444"/>
+    <Setter Property="Foreground" Value="#FFFFFF"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+
+  <Style Selector="Button.danger:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#DC2626"/>
+  </Style>
+
+  <Style Selector="Button.ghost">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="#64748B"/>
+    <Setter Property="BorderBrush" Value="#252D3D"/>
+    <Setter Property="BorderThickness" Value="1"/>
+  </Style>
+
+  <Style Selector="Button.ghost:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#161B27"/>
+  </Style>
+
+  <Style Selector="Button.tab">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="#475569"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="14 7"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="CornerRadius" Value="6"/>
+  </Style>
+
+  <Style Selector="Button.tab:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#161B27"/>
+  </Style>
+
+  <Style Selector="Button.tab-active">
+    <Setter Property="Background" Value="#1C2232"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="14 7"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="CornerRadius" Value="6"/>
+  </Style>
+
+  <!-- ═══ ScrollViewer ═════════════════════════════════════════════════ -->
+  <Style Selector="ScrollViewer">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+
+  <!-- ═══ ListBox ══════════════════════════════════════════════════════ -->
+  <Style Selector="ListBox">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+
+  <Style Selector="ListBoxItem">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Margin" Value="0 1"/>
+  </Style>
+
+  <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+
+  <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#161B27"/>
+    <Setter Property="CornerRadius" Value="6"/>
+  </Style>
+
+  <!-- ═══ Separator ════════════════════════════════════════════════════ -->
+  <Style Selector="Separator">
+    <Setter Property="Background" Value="#1E2535"/>
+    <Setter Property="Height" Value="1"/>
+  </Style>
+
+</Styles>
