@@ -1,3 +1,4 @@
+using System.Reactive;
 using ReactiveUI;
 using TouristGuide.Models;
 
@@ -11,6 +12,7 @@ public class MainViewModel : ViewModelBase
     {
         var citiesVm = new CitiesViewModel(this);
         CurrentView = citiesVm;
+        NavigateToCitiesCommand = ReactiveCommand.Create(NavigateToCities);
     }
 
     public ViewModelBase CurrentView
@@ -18,6 +20,8 @@ public class MainViewModel : ViewModelBase
         get => _currentView;
         set => this.RaiseAndSetIfChanged(ref _currentView, value);
     }
+
+    public ReactiveCommand<Unit, Unit> NavigateToCitiesCommand { get; }
 
     public void NavigateToCities()
     {

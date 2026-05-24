@@ -81,12 +81,17 @@
         <!-- Шапка -->
         <Border Grid.Row="0" Background="#1A2B45">
             <DockPanel Margin="28,0">
-                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
-                    <TextBlock Text="🗺" FontSize="28" VerticalAlignment="Center"/>
-                    <TextBlock Text="Туристический путеводитель"
-                               FontSize="18" FontWeight="Bold"
-                               Foreground="White" VerticalAlignment="Center"/>
-                </StackPanel>
+                <Button DockPanel.Dock="Left"
+                        Command="{Binding NavigateToCitiesCommand}"
+                        Background="Transparent" BorderThickness="0"
+                        Padding="0" Cursor="Hand" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="🗺" FontSize="28" VerticalAlignment="Center"/>
+                        <TextBlock Text="Туристический путеводитель"
+                                   FontSize="18" FontWeight="Bold"
+                                   Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
                 <TextBlock DockPanel.Dock="Right"
                            Text="Россия • Открой новые места"
                            FontSize="13" Foreground="#7A9BBC"

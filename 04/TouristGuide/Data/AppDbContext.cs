@@ -279,7 +279,7 @@ public class AppDbContext : DbContext
                 Name = "Новгородский детинец",
                 Description = "Древний кремль IX–XV веков — объект Всемирного наследия ЮНЕСКО.",
                 History = "Один из древнейших кремлей России. Нынешние каменные стены возведены в 1044–1430 годах. На территории находятся Софийский собор (1045–1050) — один из старейших храмов России — и Грановитая палата. Включён в список Всемирного наследия ЮНЕСКО в 1992 году.",
-                PhotoUrl = "https://avatars.mds.yandex.net/i?id=5b3c1b59d93bebe89c50ec99770b55f47c749cc5-8810682-images-thumbs&n=13",
+                PhotoUrl = "https://avatars.mds.yandex.net/i?id=5b3c1b59d93bebe89c50ec99770b55f47c749cc5-8810682-images-thumbs&n=13п",
                 WorkingHours = "Территория — 6:00–24:00; музеи — 10:00–18:00, выходной — вторник",
                 TicketPrice = 250
             }
