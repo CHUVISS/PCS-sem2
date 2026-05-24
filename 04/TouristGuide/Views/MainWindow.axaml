@@ -12,15 +12,16 @@
         WindowStartupLocation="CenterScreen"
         Background="#F0F4F8">
 
+    <!-- Глобальные стили -->
     <Window.Styles>
-        <!-- Base card style -->
+        <!-- Карточка -->
         <Style Selector="Border.card">
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="BoxShadow" Value="0 2 16 0 #18000000"/>
             <Setter Property="Padding" Value="20"/>
         </Style>
-        <!-- Header style -->
+        <!-- Заголовки -->
         <Style Selector="TextBlock.h1">
             <Setter Property="FontSize" Value="28"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -31,18 +32,20 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="#1A2B45"/>
         </Style>
+        <!-- Подпись над значением -->
         <Style Selector="TextBlock.label">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="#8896A4"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="LetterSpacing" Value="1"/>
         </Style>
+        <!-- Основной текст -->
         <Style Selector="TextBlock.body">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="#3D4F63"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
-        <!-- Back button -->
+        <!-- Кнопка "Назад" -->
         <Style Selector="Button.back">
             <Setter Property="Background" Value="#E8EDF2"/>
             <Setter Property="Foreground" Value="#1A2B45"/>
@@ -54,7 +57,7 @@
         <Style Selector="Button.back:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#D0D8E4"/>
         </Style>
-        <!-- Primary button -->
+        <!-- Основная кнопка -->
         <Style Selector="Button.primary">
             <Setter Property="Background" Value="#2563EB"/>
             <Setter Property="Foreground" Value="White"/>
@@ -68,14 +71,14 @@
         </Style>
     </Window.Styles>
 
+    <!-- Два ряда: шапка и контент -->
     <Grid>
-        <!-- Top header bar -->
         <Grid.RowDefinitions>
             <RowDefinition Height="64"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+        <!-- Шапка -->
         <Border Grid.Row="0" Background="#1A2B45">
             <DockPanel Margin="28,0">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
@@ -91,11 +94,11 @@
             </DockPanel>
         </Border>
 
-        <!-- Content area — роутинг по DataType -->
+        <!-- Контент: шаблон выбирается по типу CurrentView -->
         <ContentControl Grid.Row="1" Content="{Binding CurrentView}">
             <ContentControl.DataTemplates>
 
-                <!-- ===== СПИСОК ГОРОДОВ ===== -->
+                <!-- Список городов -->
                 <DataTemplate DataType="vm:CitiesViewModel">
                     <Grid Margin="28,24">
                         <Grid.RowDefinitions>
@@ -104,13 +107,14 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
+                        <!-- Заголовок страницы -->
                         <StackPanel Grid.Row="0" Margin="0,0,0,16">
                             <TextBlock Classes="h1" Text="Города России"/>
                             <TextBlock Text="Выберите город, чтобы узнать о нём подробнее"
                                        FontSize="14" Foreground="#8896A4" Margin="0,4,0,0"/>
                         </StackPanel>
 
-                        <!-- Search -->
+                        <!-- Строка поиска -->
                         <Border Grid.Row="1" Background="White" CornerRadius="10"
                                 BoxShadow="0 1 8 0 #10000000" Margin="0,0,0,20" Padding="4">
                             <DockPanel>
@@ -124,7 +128,7 @@
                             </DockPanel>
                         </Border>
 
-                        <!-- Cities grid -->
+                        <!-- Сетка карточек городов -->
                         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                             <ItemsControl ItemsSource="{Binding Cities}">
                                 <ItemsControl.ItemsPanel>
@@ -140,7 +144,6 @@
                                                 Padding="0" Margin="0,0,16,16"
                                                 Cursor="Hand">
                                             <Border Classes="card" Width="300" Padding="0" ClipToBounds="True">
-                                                <!-- City photo -->
                                                 <StackPanel>
                                                     <Border Height="160" ClipToBounds="True" CornerRadius="12,12,0,0">
                                                         <Image helpers:ImageHelper.Source="{Binding PhotoUrl}"
@@ -174,7 +177,7 @@
                     </Grid>
                 </DataTemplate>
 
-                <!-- ===== ДЕТАЛИ ГОРОДА ===== -->
+                <!-- Детали города -->
                 <DataTemplate DataType="vm:CityDetailViewModel">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="28,24" Spacing="20">
@@ -182,7 +185,7 @@
                             <Button Classes="back" Content="← Назад к городам"
                                     Command="{Binding GoBackCommand}"/>
 
-                            <!-- City header card -->
+                            <!-- Фото и основные сведения о городе -->
                             <Border Classes="card" Padding="0" ClipToBounds="True">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -200,7 +203,8 @@
                                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                         <Separator Background="#E8EDF2" Height="1"/>
-                                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" >
+                                        <!-- Таблица с характеристиками -->
+                                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
                                             <TextBlock Grid.Row="0" Grid.Column="0" Classes="label" Text="РЕГИОН" Margin="0,0,16,8"/>
                                             <TextBlock Grid.Row="0" Grid.Column="1" Classes="body" Text="{Binding City.Region}"/>
                                             <TextBlock Grid.Row="1" Grid.Column="0" Classes="label" Text="НАСЕЛЕНИЕ" Margin="0,0,16,8"/>
@@ -218,7 +222,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- History -->
+                            <!-- История города -->
                             <Border Classes="card">
                                 <StackPanel Spacing="10">
                                     <TextBlock Classes="h2" Text="История"/>
@@ -227,7 +231,7 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Attractions -->
+                            <!-- Список достопримечательностей -->
                             <StackPanel Spacing="12">
                                 <TextBlock Classes="h1" Text="Достопримечательности"/>
                                 <ItemsControl ItemsSource="{Binding Attractions}">
@@ -284,7 +288,7 @@
                     </ScrollViewer>
                 </DataTemplate>
 
-                <!-- ===== ДЕТАЛИ ДОСТОПРИМЕЧАТЕЛЬНОСТИ ===== -->
+                <!-- Детали достопримечательности -->
                 <DataTemplate DataType="vm:AttractionDetailViewModel">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="28,24" Spacing="20">
@@ -293,7 +297,7 @@
                                     Content="{Binding Attraction.City.Name, StringFormat='← Назад к городу {0}'}"
                                     Command="{Binding GoBackCommand}"/>
 
-                            <!-- Main card -->
+                            <!-- Фото и описание -->
                             <Border Classes="card" Padding="0" ClipToBounds="True">
                                 <StackPanel>
                                     <Border Height="320" ClipToBounds="True" CornerRadius="12,12,0,0">
@@ -304,7 +308,7 @@
                                         <Separator Background="#E8EDF2" Height="1"/>
                                         <TextBlock Classes="body" Text="{Binding Attraction.Description}" LineHeight="22"/>
 
-                                        <!-- Info chips -->
+                                        <!-- Часы работы и стоимость -->
                                         <WrapPanel Orientation="Horizontal">
                                             <Border Background="#EFF6FF" CornerRadius="8" Padding="14,8" Margin="0,0,12,8">
                                                 <StackPanel Orientation="Horizontal" Spacing="6">
@@ -331,7 +335,7 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- History card -->
+                            <!-- История достопримечательности -->
                             <Border Classes="card">
                                 <StackPanel Spacing="10">
                                     <TextBlock Classes="h2" Text="История"/>

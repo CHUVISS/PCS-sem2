@@ -16,7 +16,6 @@ public class CityDetailViewModel : ViewModelBase
     {
         _main = main;
 
-        // Load full city with attractions from DB
         using var db = new AppDbContext();
         City = db.Cities.Include(c => c.Attractions).FirstOrDefault(c => c.Id == city.Id) ?? city;
         Attractions = new ObservableCollection<Attraction>(City.Attractions);
