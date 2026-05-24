@@ -75,6 +75,11 @@ coverage*.info
 .AppleDouble
 .LSOverride
 
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
 # Windows
 Thumbs.db
 ehthumbs.db
