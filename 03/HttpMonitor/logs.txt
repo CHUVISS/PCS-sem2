@@ -17,3 +17,135 @@
 [2026-05-06 11:29:41.246] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:191ms
 [2026-05-06 11:30:29.287] OUT POST https://yandex.ru Status:200 Duration:2545ms
 [2026-05-06 11:31:15.523] OUT POST https://yandex.ru Status:200 Duration:3485ms
+[2026-05-06 11:32:44.604] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:468ms
+[2026-05-06 11:32:58.173] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:69ms
+[2026-05-06 11:33:12.077] IN GET http://localhost:8080/ Status:200 Duration:38ms Body:
+[2026-05-06 11:33:12.077] OUT GET http://localhost:8080/ Status:200 Duration:55ms
+[2026-05-06 11:33:15.635] OUT GET https://httpbin.org/get Status:200 Duration:849ms
+[2026-05-06 11:34:08.364] IN POST http://localhost:8080/ Status:201 Duration:43ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 11:35:50.230] IN POST http://localhost:8080/ Status:201 Duration:1ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 11:35:54.051] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 11:35:54.051] OUT GET http://localhost:8080/ Status:200 Duration:2ms
+[2026-05-06 14:25:56.632] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:472ms
+[2026-05-06 14:26:01.197] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:61ms
+[2026-05-06 14:26:02.133] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:64ms
+[2026-05-06 14:26:02.860] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:62ms
+[2026-05-06 14:26:04.766] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:178ms
+[2026-05-06 14:26:06.930] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:178ms
+[2026-05-06 14:26:10.029] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:178ms
+[2026-05-06 14:26:10.916] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:176ms
+[2026-05-06 14:26:24.519] OUT POST https://yandex.ru Status:200 Duration:1722ms
+[2026-05-06 14:26:40.105] OUT POST https://yandex.ru Status:200 Duration:3672ms
+[2026-05-06 14:26:44.180] OUT GET https://yandex.ru Status:200 Duration:2673ms
+[2026-05-06 14:27:19.395] OUT GET https://yandex.ru Status:200 Duration:2533ms
+[2026-05-06 14:32:38.951] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:505ms
+[2026-05-06 14:34:04.041] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:1204ms
+[2026-05-06 14:34:08.636] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:176ms
+[2026-05-06 14:34:56.528] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:1066ms
+[2026-05-06 14:35:00.424] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:61ms
+[2026-05-06 14:35:05.976] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:71ms
+[2026-05-06 14:35:06.619] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:62ms
+[2026-05-06 14:35:07.057] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:64ms
+[2026-05-06 14:35:07.452] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:84ms
+[2026-05-06 14:35:07.870] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:82ms
+[2026-05-06 14:35:08.271] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:64ms
+[2026-05-06 14:35:11.282] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:203ms
+[2026-05-06 14:51:13.251] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:500ms
+[2026-05-06 14:54:08.503] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:2491ms
+[2026-05-06 14:54:10.699] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:57ms
+[2026-05-06 14:54:15.536] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:185ms
+[2026-05-06 14:55:20.764] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:505ms
+[2026-05-06 14:55:58.126] IN GET http://localhost:8080/ Status:200 Duration:27ms Body:
+[2026-05-06 14:55:58.315] IN GET http://localhost:8080/favicon.ico Status:200 Duration:0ms Body:
+[2026-05-06 14:55:58.317] IN GET http://localhost:8080/favicon.ico Status:200 Duration:0ms Body:
+[2026-05-06 14:57:24.768] IN GET http://localhost:8080/ Status:200 Duration:54ms Body:
+[2026-05-06 14:57:24.780] OUT GET http://localhost:8080/ Status:200 Duration:75ms
+[2026-05-06 14:57:26.923] IN POST http://localhost:8080/ Status:201 Duration:42ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:26.924] OUT POST http://localhost:8080/ Status:201 Duration:46ms
+[2026-05-06 14:57:30.219] IN POST http://localhost:8080/ Status:201 Duration:1ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:31.024] IN POST http://localhost:8080/ Status:201 Duration:0ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:31.024] OUT POST http://localhost:8080/ Status:201 Duration:1ms
+[2026-05-06 14:57:32.007] IN POST http://localhost:8080/ Status:201 Duration:0ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:32.008] OUT POST http://localhost:8080/ Status:201 Duration:1ms
+[2026-05-06 14:57:36.088] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:36.089] OUT GET http://localhost:8080/ Status:200 Duration:3ms
+[2026-05-06 14:57:36.304] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:36.305] OUT GET http://localhost:8080/ Status:200 Duration:2ms
+[2026-05-06 14:57:36.506] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:36.506] OUT GET http://localhost:8080/ Status:200 Duration:1ms
+[2026-05-06 14:57:37.132] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:37.132] OUT GET http://localhost:8080/ Status:200 Duration:1ms
+[2026-05-06 14:57:37.377] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:37.377] OUT GET http://localhost:8080/ Status:200 Duration:1ms
+[2026-05-06 14:57:37.557] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:37.557] OUT GET http://localhost:8080/ Status:200 Duration:1ms
+[2026-05-06 14:57:38.020] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:38.023] OUT GET http://localhost:8080/ Status:200 Duration:4ms
+[2026-05-06 14:57:39.389] OUT POST http://localhost:8080/ Status:201 Duration:3ms
+ody:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:41.242] IN POST http://localhost:8080/ Status:201 Duration:0ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:41.243] OUT POST http://localhost:8080/ Status:201 Duration:2ms
+[2026-05-06 14:57:43.109] IN POST http://localhost:8080/ Status:201 Duration:0ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:43.110] OUT POST http://localhost:8080/ Status:201 Duration:2ms
+[2026-05-06 14:57:46.330] IN POST http://localhost:8080/ Status:201 Duration:0ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:46.331] OUT POST http://localhost:8080/ Status:201 Duration:3ms
+[2026-05-06 14:57:49.518] OUT POST http://localhost:8080/ Status:201 Duration:2ms
+ody:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:51.846] IN POST http://localhost:8080/ Status:201 Duration:0ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 14:57:51.847] OUT POST http://localhost:8080/ Status:201 Duration:2ms
+[2026-05-06 14:57:53.196] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:53.197] OUT GET http://localhost:8080/ Status:200 Duration:2ms
+[2026-05-06 14:57:53.746] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 14:57:53.747] OUT GET http://localhost:8080/ Status:200 Duration:2ms
+[2026-05-06 14:57:58.161] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:474ms
+[2026-05-06 14:58:00.189] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:195ms
+[2026-05-06 14:58:02.105] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:173ms
+[2026-05-06 14:58:04.594] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:174ms
+[2026-05-06 15:04:37.994] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:503ms
+[2026-05-06 15:05:59.857] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:356ms
+[2026-05-06 15:06:49.187] IN GET http://localhost:8080/ Status:200 Duration:30ms Body:
+[2026-05-06 15:06:52.161] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:06:52.614] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:06:59.552] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:07:20.655] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:478ms
+[2026-05-06 15:07:31.530] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:181ms
+[2026-05-06 15:07:36.548] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:176ms
+[2026-05-06 15:07:46.939] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:176ms
+[2026-05-06 15:07:51.338] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:63ms
+[2026-05-06 15:08:02.125] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:08:02.126] OUT GET http://localhost:8080/ Status:200 Duration:5ms
+[2026-05-06 15:08:05.063] IN POST http://localhost:8080/ Status:201 Duration:41ms Body:{
+  "message": "Hello from HttpMonitor!"
+}
+[2026-05-06 15:08:05.064] OUT POST http://localhost:8080/ Status:201 Duration:43ms
+[2026-05-06 15:09:50.021] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:09:50.192] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:09:50.443] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:09:50.726] IN GET http://localhost:8080/ Status:200 Duration:0ms Body:
+[2026-05-06 15:10:14.137] OUT POST https://jsonplaceholder.typicode.com/posts/1 Status:404 Duration:712ms
+[2026-05-06 15:10:20.415] OUT POST https://jsonplaceholder.typicode.com/posts/ Status:201 Duration:173ms
+[2026-05-06 15:10:24.301] OUT GET https://jsonplaceholder.typicode.com/posts/1 Status:200 Duration:56ms

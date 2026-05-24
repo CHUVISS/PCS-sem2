@@ -344,9 +344,13 @@
                       Command="{Binding SetFilterCommand}"
                       CommandParameter="2xx"
                       Padding="10 5" FontSize="11" Margin="0 0 4 4"/>
-              <Button Content="4xx+" Classes="tab"
+              <Button Content="4xx" Classes="tab"
                       Command="{Binding SetFilterCommand}"
-                      CommandParameter="4xx+"
+                      CommandParameter="4xx"
+                      Padding="10 5" FontSize="11" Margin="0 0 4 4"/>
+              <Button Content="5xx" Classes="tab"
+                      Command="{Binding SetFilterCommand}"
+                      CommandParameter="5xx"
                       Padding="10 5" FontSize="11" Margin="0 0 4 4"/>
             </WrapPanel>
           </StackPanel>

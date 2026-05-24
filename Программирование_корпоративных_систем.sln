@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03", "03", "{296032B5-9ABF-E3B8-7628-92A72283A574}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02", "02", "{90C0C08D-8EBE-550D-E0B5-AEEA9C22D46E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpMonitor", "03\HttpMonitor\HttpMonitor.csproj", "{A96D4A24-0AB6-1833-492A-199DB4CE7C33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkAnalyzer", "02\NetworkAnalyzer\NetworkAnalyzer.csproj", "{A9700192-ADDF-86C0-2B29-03A8500F3B66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A96D4A24-0AB6-1833-492A-199DB4CE7C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96D4A24-0AB6-1833-492A-199DB4CE7C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96D4A24-0AB6-1833-492A-199DB4CE7C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96D4A24-0AB6-1833-492A-199DB4CE7C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9700192-ADDF-86C0-2B29-03A8500F3B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9700192-ADDF-86C0-2B29-03A8500F3B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9700192-ADDF-86C0-2B29-03A8500F3B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9700192-ADDF-86C0-2B29-03A8500F3B66}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A96D4A24-0AB6-1833-492A-199DB4CE7C33} = {296032B5-9ABF-E3B8-7628-92A72283A574}
+		{A9700192-ADDF-86C0-2B29-03A8500F3B66} = {90C0C08D-8EBE-550D-E0B5-AEEA9C22D46E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F6C620B-A7DE-42F4-B38A-B1538163C32F}
+	EndGlobalSection
+EndGlobal

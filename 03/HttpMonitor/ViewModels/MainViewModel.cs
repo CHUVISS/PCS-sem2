@@ -196,7 +196,8 @@ public class MainViewModel : ReactiveObject
             "IN"   => _allLogs.Where(l => l.Direction == "IN"),
             "OUT"  => _allLogs.Where(l => l.Direction == "OUT"),
             "2xx"  => _allLogs.Where(l => l.StatusCode >= 200 && l.StatusCode < 300),
-            "4xx+" => _allLogs.Where(l => l.StatusCode >= 400),
+            "4xx"  => _allLogs.Where(l => l.StatusCode >= 400 && l.StatusCode < 500),
+            "5xx"  => _allLogs.Where(l => l.StatusCode >= 500),
             _      => _allLogs.AsEnumerable()
         };
         foreach (var e in source.Take(100))

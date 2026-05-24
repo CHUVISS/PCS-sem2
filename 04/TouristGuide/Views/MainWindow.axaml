@@ -1,0 +1,350 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TouristGuide.ViewModels"
+        xmlns:views="using:TouristGuide.Views"
+        xmlns:models="using:TouristGuide.Models"
+        xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+        x:Class="TouristGuide.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="Туристический путеводитель"
+        Width="1100" Height="760"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        Background="#F0F4F8">
+
+    <Window.Styles>
+        <!-- Base card style -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BoxShadow" Value="0 2 16 0 #18000000"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+        <!-- Header style -->
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1A2B45"/>
+        </Style>
+        <Style Selector="TextBlock.h2">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1A2B45"/>
+        </Style>
+        <Style Selector="TextBlock.label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#8896A4"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="LetterSpacing" Value="1"/>
+        </Style>
+        <Style Selector="TextBlock.body">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#3D4F63"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <!-- Back button -->
+        <Style Selector="Button.back">
+            <Setter Property="Background" Value="#E8EDF2"/>
+            <Setter Property="Foreground" Value="#1A2B45"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.back:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#D0D8E4"/>
+        </Style>
+        <!-- Primary button -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1D4ED8"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+        <!-- Top header bar -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#1A2B45">
+            <DockPanel Margin="28,0">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
+                    <TextBlock Text="🗺" FontSize="28" VerticalAlignment="Center"/>
+                    <TextBlock Text="Туристический путеводитель"
+                               FontSize="18" FontWeight="Bold"
+                               Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock DockPanel.Dock="Right"
+                           Text="Россия • Открой новые места"
+                           FontSize="13" Foreground="#7A9BBC"
+                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Content area — роутинг по DataType -->
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}">
+            <ContentControl.DataTemplates>
+
+                <!-- ===== СПИСОК ГОРОДОВ ===== -->
+                <DataTemplate DataType="vm:CitiesViewModel">
+                    <Grid Margin="28,24">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                            <TextBlock Classes="h1" Text="Города России"/>
+                            <TextBlock Text="Выберите город, чтобы узнать о нём подробнее"
+                                       FontSize="14" Foreground="#8896A4" Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <!-- Search -->
+                        <Border Grid.Row="1" Background="White" CornerRadius="10"
+                                BoxShadow="0 1 8 0 #10000000" Margin="0,0,0,20" Padding="4">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Text="🔍" FontSize="16"
+                                           VerticalAlignment="Center" Margin="12,0,4,0" Foreground="#8896A4"/>
+                                <TextBox Background="Transparent" BorderThickness="0"
+                                         Watermark="Поиск по названию или региону..."
+                                         Text="{Binding SearchText}"
+                                         FontSize="14" Padding="8,10"
+                                         VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Cities grid -->
+                        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Cities}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="models:City">
+                                        <Button Command="{Binding $parent[ItemsControl].DataContext.SelectCityCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="Transparent" BorderThickness="0"
+                                                Padding="0" Margin="0,0,16,16"
+                                                Cursor="Hand">
+                                            <Border Classes="card" Width="300" Padding="0" ClipToBounds="True">
+                                                <!-- City photo -->
+                                                <StackPanel>
+                                                    <Border Height="160" ClipToBounds="True" CornerRadius="12,12,0,0">
+                                                        <asyncImageLoader:AdvancedImage Source="{Binding PhotoUrl}"
+                                                               Stretch="UniformToFill"/>
+                                                    </Border>
+                                                    <StackPanel Margin="16,14,16,16" Spacing="6">
+                                                        <TextBlock Classes="h2" Text="{Binding Name}"/>
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <TextBlock Text="📍" FontSize="12"/>
+                                                            <TextBlock FontSize="12" Foreground="#8896A4"
+                                                                       Text="{Binding Region}" TextWrapping="Wrap"/>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <TextBlock Text="👥" FontSize="12"/>
+                                                            <TextBlock FontSize="12" Foreground="#8896A4">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="Население: {0:N0} чел.">
+                                                                        <Binding Path="Population"/>
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </DataTemplate>
+
+                <!-- ===== ДЕТАЛИ ГОРОДА ===== -->
+                <DataTemplate DataType="vm:CityDetailViewModel">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="28,24" Spacing="20">
+
+                            <Button Classes="back" Content="← Назад к городам"
+                                    Command="{Binding GoBackCommand}"/>
+
+                            <!-- City header card -->
+                            <Border Classes="card" Padding="0" ClipToBounds="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="360"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Height="280" ClipToBounds="True" CornerRadius="12,0,0,12">
+                                        <asyncImageLoader:AdvancedImage Source="{Binding City.PhotoUrl}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="28,28,24,28" Spacing="12">
+                                        <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                                            <asyncImageLoader:AdvancedImage Source="{Binding City.CoatOfArmsUrl}"
+                                                   Width="56" Height="56" Stretch="Uniform"/>
+                                            <TextBlock Classes="h1" Text="{Binding City.Name}"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <Separator Background="#E8EDF2" Height="1"/>
+                                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" >
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Classes="label" Text="РЕГИОН" Margin="0,0,16,8"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Classes="body" Text="{Binding City.Region}"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Classes="label" Text="НАСЕЛЕНИЕ" Margin="0,0,16,8"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Classes="body" Text="{Binding PopulationFormatted}"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="0" Classes="label" Text="ДОСТОПРИМЕЧАТЕЛЬНОСТИ" Margin="0,0,16,0"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1" Classes="body">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} объектов">
+                                                        <Binding Path="Attractions.Count"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- History -->
+                            <Border Classes="card">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Classes="h2" Text="История"/>
+                                    <Separator Background="#E8EDF2" Height="1"/>
+                                    <TextBlock Classes="body" Text="{Binding City.History}" LineHeight="22"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Attractions -->
+                            <StackPanel Spacing="12">
+                                <TextBlock Classes="h1" Text="Достопримечательности"/>
+                                <ItemsControl ItemsSource="{Binding Attractions}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="12"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding $parent[ItemsControl].DataContext.SelectAttractionCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    Padding="0" HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    Cursor="Hand">
+                                                <Border Classes="card" Padding="0" ClipToBounds="True">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="200"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Border Grid.Column="0" Height="130" ClipToBounds="True" CornerRadius="12,0,0,12">
+                                                            <asyncImageLoader:AdvancedImage Source="{Binding PhotoUrl}" Stretch="UniformToFill"/>
+                                                        </Border>
+                                                        <StackPanel Grid.Column="1" Margin="20,16" Spacing="6">
+                                                            <TextBlock Classes="h2" Text="{Binding Name}"/>
+                                                            <TextBlock Classes="body" Text="{Binding Description}"
+                                                                       MaxLines="2" TextTrimming="CharacterEllipsis"/>
+                                                            <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,6,0,0">
+                                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                                    <TextBlock Text="🕐" FontSize="12"/>
+                                                                    <TextBlock FontSize="12" Foreground="#8896A4"
+                                                                               Text="{Binding WorkingHours}"/>
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                                    <TextBlock Text="🎟" FontSize="12"/>
+                                                                    <TextBlock FontSize="12" Foreground="#8896A4">
+                                                                        <TextBlock.Text>
+                                                                            <Binding Path="TicketPrice" StringFormat="{}{0:N0} ₽" TargetNullValue="Бесплатно"/>
+                                                                        </TextBlock.Text>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DataTemplate>
+
+                <!-- ===== ДЕТАЛИ ДОСТОПРИМЕЧАТЕЛЬНОСТИ ===== -->
+                <DataTemplate DataType="vm:AttractionDetailViewModel">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="28,24" Spacing="20">
+
+                            <Button Classes="back"
+                                    Content="{Binding Attraction.City.Name, StringFormat='← Назад к городу {0}'}"
+                                    Command="{Binding GoBackCommand}"/>
+
+                            <!-- Main card -->
+                            <Border Classes="card" Padding="0" ClipToBounds="True">
+                                <StackPanel>
+                                    <Border Height="320" ClipToBounds="True" CornerRadius="12,12,0,0">
+                                        <asyncImageLoader:AdvancedImage Source="{Binding Attraction.PhotoUrl}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <StackPanel Margin="28,24" Spacing="16">
+                                        <TextBlock Classes="h1" Text="{Binding Attraction.Name}"/>
+                                        <Separator Background="#E8EDF2" Height="1"/>
+                                        <TextBlock Classes="body" Text="{Binding Attraction.Description}" LineHeight="22"/>
+
+                                        <!-- Info chips -->
+                                        <WrapPanel Orientation="Horizontal">
+                                            <Border Background="#EFF6FF" CornerRadius="8" Padding="14,8" Margin="0,0,12,8">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <TextBlock Text="🕐" FontSize="14"/>
+                                                    <StackPanel>
+                                                        <TextBlock Classes="label" Text="ЧАСЫ РАБОТЫ"/>
+                                                        <TextBlock FontSize="13" Foreground="#2563EB" FontWeight="SemiBold"
+                                                                   Text="{Binding WorkingHoursFormatted}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Background="#F0FDF4" CornerRadius="8" Padding="14,8" Margin="0,0,0,8">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <TextBlock Text="🎟" FontSize="14"/>
+                                                    <StackPanel>
+                                                        <TextBlock Classes="label" Text="СТОИМОСТЬ"/>
+                                                        <TextBlock FontSize="13" Foreground="#16A34A" FontWeight="SemiBold"
+                                                                   Text="{Binding TicketPriceFormatted}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- History card -->
+                            <Border Classes="card">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Classes="h2" Text="История"/>
+                                    <Separator Background="#E8EDF2" Height="1"/>
+                                    <TextBlock Classes="body" Text="{Binding Attraction.History}" LineHeight="22"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </DataTemplate>
+
+            </ContentControl.DataTemplates>
+        </ContentControl>
+    </Grid>
+</Window>

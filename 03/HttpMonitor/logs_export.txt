@@ -1,6 +1,10 @@
-# HttpMonitor Export — 2026-05-06 11:27:08
-# Entries: 3
+# HttpMonitor Export — 2026-05-06 14:56:24
+# Entries: 7
 
-[11:26:59.262] OUT POST https://jsonplaceholder.typicode.com/posts/1 → 404 (193ms)
-[11:26:47.144] OUT POST https://jsonplaceholder.typicode.com/posts/1 → 404 (182ms)
-[11:26:41.372] OUT POST https://jsonplaceholder.typicode.com/posts/1 → 404 (1529ms)
+[14:55:58.317] IN GET http://localhost:8080/favicon.ico → 200 (0ms)
+[14:55:58.315] IN GET http://localhost:8080/favicon.ico → 200 (0ms)
+[14:55:58.126] IN GET http://localhost:8080/ → 200 (27ms)
+[14:55:20.764] OUT POST https://jsonplaceholder.typicode.com/posts/ → 201 (505ms)
+[14:54:15.536] OUT POST https://jsonplaceholder.typicode.com/posts/ → 201 (185ms)
+[14:54:10.699] OUT GET https://jsonplaceholder.typicode.com/posts/1 → 200 (57ms)
+[14:54:08.503] OUT GET https://jsonplaceholder.typicode.com/posts/1 → 200 (2491ms)
