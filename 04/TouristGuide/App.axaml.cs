@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using TouristGuide.Helpers;
 using TouristGuide.ViewModels;
 using TouristGuide.Views;
 
@@ -10,6 +11,7 @@ public partial class App : Application
 {
     public override void Initialize()
     {
+        ImageHelper.Initialize();
         AvaloniaXamlLoader.Load(this);
     }
 

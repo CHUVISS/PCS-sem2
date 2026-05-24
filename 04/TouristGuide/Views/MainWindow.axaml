@@ -3,7 +3,7 @@
         xmlns:vm="using:TouristGuide.ViewModels"
         xmlns:views="using:TouristGuide.Views"
         xmlns:models="using:TouristGuide.Models"
-        xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+        xmlns:helpers="using:TouristGuide.Helpers"
         x:Class="TouristGuide.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Title="Туристический путеводитель"
@@ -143,7 +143,7 @@
                                                 <!-- City photo -->
                                                 <StackPanel>
                                                     <Border Height="160" ClipToBounds="True" CornerRadius="12,12,0,0">
-                                                        <asyncImageLoader:AdvancedImage Source="{Binding PhotoUrl}"
+                                                        <Image helpers:ImageHelper.Source="{Binding PhotoUrl}"
                                                                Stretch="UniformToFill"/>
                                                     </Border>
                                                     <StackPanel Margin="16,14,16,16" Spacing="6">
@@ -190,11 +190,11 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Height="280" ClipToBounds="True" CornerRadius="12,0,0,12">
-                                        <asyncImageLoader:AdvancedImage Source="{Binding City.PhotoUrl}" Stretch="UniformToFill"/>
+                                        <Image helpers:ImageHelper.Source="{Binding City.PhotoUrl}" Stretch="UniformToFill"/>
                                     </Border>
                                     <StackPanel Grid.Column="1" Margin="28,28,24,28" Spacing="12">
                                         <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
-                                            <asyncImageLoader:AdvancedImage Source="{Binding City.CoatOfArmsUrl}"
+                                            <Image helpers:ImageHelper.Source="{Binding City.CoatOfArmsUrl}"
                                                    Width="56" Height="56" Stretch="Uniform"/>
                                             <TextBlock Classes="h1" Text="{Binding City.Name}"
                                                        VerticalAlignment="Center"/>
@@ -251,7 +251,7 @@
                                                             <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
                                                         <Border Grid.Column="0" Height="130" ClipToBounds="True" CornerRadius="12,0,0,12">
-                                                            <asyncImageLoader:AdvancedImage Source="{Binding PhotoUrl}" Stretch="UniformToFill"/>
+                                                            <Image helpers:ImageHelper.Source="{Binding PhotoUrl}" Stretch="UniformToFill"/>
                                                         </Border>
                                                         <StackPanel Grid.Column="1" Margin="20,16" Spacing="6">
                                                             <TextBlock Classes="h2" Text="{Binding Name}"/>
@@ -297,7 +297,7 @@
                             <Border Classes="card" Padding="0" ClipToBounds="True">
                                 <StackPanel>
                                     <Border Height="320" ClipToBounds="True" CornerRadius="12,12,0,0">
-                                        <asyncImageLoader:AdvancedImage Source="{Binding Attraction.PhotoUrl}" Stretch="UniformToFill"/>
+                                        <Image helpers:ImageHelper.Source="{Binding Attraction.PhotoUrl}" Stretch="UniformToFill"/>
                                     </Border>
                                     <StackPanel Margin="28,24" Spacing="16">
                                         <TextBlock Classes="h1" Text="{Binding Attraction.Name}"/>
