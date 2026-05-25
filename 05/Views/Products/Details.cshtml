@@ -1,0 +1,66 @@
+@model Product
+@{
+    ViewData["Title"] = "Продукт: " + Model.Name;
+}
+
+<div class="d-flex justify-content-between mb-4">
+    <h2><i class="bi bi-cpu me-2"></i>@Model.Name</h2>
+    <div>
+        <a href="/Products/Edit/@Model.Id" class="btn btn-warning"><i class="bi bi-pencil me-1"></i>Редактировать</a>
+        <a href="/Products" class="btn btn-outline-secondary">← Назад</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header"><h6 class="mb-0">Основные данные</h6></div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Категория</dt>
+                    <dd class="col-sm-7"><span class="badge bg-info text-dark">@(Model.Category ?? "—")</span></dd>
+                    <dt class="col-sm-5">Время производства</dt>
+                    <dd class="col-sm-7"><strong>@Model.ProductionTimePerUnit мин/шт</strong></dd>
+                    <dt class="col-sm-5">Мин. запас</dt>
+                    <dd class="col-sm-7">@Model.MinimalStock шт</dd>
+                    <dt class="col-sm-5">Описание</dt>
+                    <dd class="col-sm-7">@(Model.Description ?? "—")</dd>
+                    @if (!string.IsNullOrEmpty(Model.Specifications))
+                    {
+                        <dt class="col-sm-5">Характеристики</dt>
+                        <dd class="col-sm-7"><code class="small">@Model.Specifications</code></dd>
+                    }
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header"><h6 class="mb-0"><i class="bi bi-boxes me-1"></i>Необходимые материалы</h6></div>
+            <div class="card-body p-0">
+                @if (Model.ProductMaterials.Any())
+                {
+                    <table class="table table-sm mb-0">
+                        <thead class="table-light">
+                            <tr><th>Материал</th><th>Количество</th><th>Ед.</th></tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var pm in Model.ProductMaterials)
+                        {
+                            <tr>
+                                <td>@pm.Material?.Name</td>
+                                <td>@pm.QuantityNeeded</td>
+                                <td>@pm.Material?.UnitOfMeasure</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="p-3 text-muted">Материалы не привязаны</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

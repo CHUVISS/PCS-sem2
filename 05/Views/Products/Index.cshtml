@@ -1,0 +1,91 @@
+@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Продукты";
+    var categories = ViewBag.Categories as IEnumerable<string?>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-cpu me-2"></i>Панель продуктов</h2>
+    <a href="/Products/Create" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>Новый продукт</a>
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-auto">
+                <label class="form-label small mb-1">Категория</label>
+                <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">Все категории</option>
+                    @foreach (var cat in categories ?? Enumerable.Empty<string?>())
+                    {
+                        @if (ViewBag.SelectedCategory == cat)
+                        {
+                            <option value="@cat" selected>@cat</option>
+                        }
+                        else
+                        {
+                            <option value="@cat">@cat</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label small mb-1">Поиск</label>
+                <input type="text" name="search" class="form-control form-control-sm"
+                       placeholder="Название продукта..." value="@ViewBag.Search" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-search me-1"></i>Найти</button>
+                <a href="/Products" class="btn btn-sm btn-outline-secondary">Сброс</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Название</th>
+                    <th>Категория</th>
+                    <th>Время произв. (мин/шт)</th>
+                    <th>Мин. запас</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>
+                        <span class="fw-semibold">@p.Name</span>
+                        @if (!string.IsNullOrEmpty(p.Description))
+                        {
+                            <div class="text-muted small">@p.Description</div>
+                        }
+                    </td>
+                    <td><span class="badge bg-info text-dark">@(p.Category ?? "—")</span></td>
+                    <td><span class="badge bg-light text-dark border">⏱ @p.ProductionTimePerUnit мин</span></td>
+                    <td>@p.MinimalStock</td>
+                    <td class="text-end">
+                        <div class="d-flex gap-1 justify-content-end">
+                            <a href="/Products/Details/@p.Id" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+                            <a href="/Products/Edit/@p.Id" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="post" action="/Products/Delete/@p.Id" style="display:inline"
+                                  onsubmit="return confirm('Удалить продукт @p.Name?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="5" class="text-center text-muted py-4">Продукты не найдены. <a href="/Products/Create">Создайте первый</a></td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

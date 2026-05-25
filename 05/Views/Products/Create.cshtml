@@ -1,0 +1,111 @@
+@model Product
+@{
+    ViewData["Title"] = "Новый продукт";
+    var materials = ViewBag.Materials as IEnumerable<Material> ?? Enumerable.Empty<Material>();
+}
+
+<div class="row justify-content-center">
+<div class="col-lg-8">
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Создать продукт</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Название продукта" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Category" class="form-label fw-semibold"></label>
+                    <input asp-for="Category" class="form-control" placeholder="Корпуса, Электроника..." />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ProductionTimePerUnit" class="form-label fw-semibold"></label>
+                    <div class="input-group">
+                        <input asp-for="ProductionTimePerUnit" class="form-control" type="number" min="1" id="prodTime" />
+                        <span class="input-group-text">мин</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="MinimalStock" class="form-label fw-semibold"></label>
+                    <input asp-for="MinimalStock" class="form-control" type="number" min="0" />
+                </div>
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label fw-semibold"></label>
+                    <textarea asp-for="Description" class="form-control" rows="2" placeholder="Описание продукта"></textarea>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Specifications" class="form-label fw-semibold"></label>
+                    <textarea asp-for="Specifications" class="form-control" rows="2" placeholder='{"вес": "5кг", "материал": "сталь"}'></textarea>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+            <h6 class="fw-bold mb-3"><i class="bi bi-boxes me-1"></i>Необходимые материалы</h6>
+            <div id="materialsContainer">
+                <div class="row g-2 mb-2 material-row">
+                    <div class="col-md-6">
+                        <select name="materialIds" class="form-select">
+                            <option value="0">— Выберите материал —</option>
+                            @foreach (var m in materials)
+                            {
+                                <option value="@m.Id">@m.Name (@m.UnitOfMeasure)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" name="quantities" class="form-control" step="0.01" min="0" placeholder="Кол-во на 1 ед." />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-outline-danger w-100" onclick="removeRow(this)"><i class="bi bi-dash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm mt-1" onclick="addMaterialRow()">
+                <i class="bi bi-plus me-1"></i>Добавить материал
+            </button>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-success flex-fill"><i class="bi bi-save me-1"></i>Создать продукт</button>
+                <a href="/Products" class="btn btn-outline-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+@section Scripts {
+<script>
+const materialsHtml = `@Html.Raw(string.Join("", materials.Select(m =>
+    $"<option value=\"{m.Id}\">{m.Name} ({m.UnitOfMeasure})</option>")))`;
+
+function addMaterialRow() {
+    const container = document.getElementById('materialsContainer');
+    const row = document.createElement('div');
+    row.className = 'row g-2 mb-2 material-row';
+    row.innerHTML = `
+        <div class="col-md-6">
+            <select name="materialIds" class="form-select">
+                <option value="0">— Выберите материал —</option>
+                ${materialsHtml}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="number" name="quantities" class="form-control" step="0.01" min="0" placeholder="Кол-во на 1 ед." />
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-danger w-100" onclick="removeRow(this)"><i class="bi bi-dash"></i></button>
+        </div>`;
+    container.appendChild(row);
+}
+
+function removeRow(btn) {
+    btn.closest('.material-row').remove();
+}
+</script>
+}

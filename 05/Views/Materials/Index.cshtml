@@ -1,0 +1,111 @@
+@model IEnumerable<Material>
+@{
+    ViewData["Title"] = "Материалы";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-box-seam me-2"></i>Панель материалов</h2>
+    <a href="/Materials/Create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Добавить материал</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Название</th>
+                    <th>Количество</th>
+                    <th>Ед. измерения</th>
+                    <th>Мин. запас</th>
+                    <th>Статус</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var m in Model)
+            {
+                <tr class="@(m.IsLowStock ? "table-danger" : "")">
+                    <td class="fw-semibold">@m.Name</td>
+                    <td>
+                        <span class="@(m.IsLowStock ? "text-danger fw-bold" : "text-success fw-bold")">
+                            @m.Quantity
+                        </span>
+                        @if (m.IsLowStock)
+                        {
+                            <i class="bi bi-exclamation-triangle-fill text-danger ms-1" title="Низкий запас!"></i>
+                        }
+                    </td>
+                    <td><span class="badge bg-secondary">@m.UnitOfMeasure</span></td>
+                    <td>@m.MinimalStock</td>
+                    <td>
+                        @if (m.IsLowStock)
+                        {
+                            <span class="badge bg-danger">Низкий запас</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">В норме</span>
+                        }
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex gap-1 justify-content-end align-items-center">
+                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                                    data-bs-target="#replenishModal" data-id="@m.Id" data-name="@m.Name">
+                                <i class="bi bi-plus-circle me-1"></i>Пополнить
+                            </button>
+                            <a href="/Materials/Edit/@m.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form method="post" action="/Materials/Delete/@m.Id" style="display:inline"
+                                  onsubmit="return confirm('Удалить материал @m.Name?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="6" class="text-center text-muted py-4">Нет материалов. <a href="/Materials/Create">Добавьте первый</a></td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Replenish Modal -->
+<div class="modal fade" id="replenishModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" id="replenishForm">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title">Пополнение запаса</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Материал: <strong id="replenishName"></strong></p>
+                    <label class="form-label">Добавить количество</label>
+                    <input type="number" name="amount" class="form-control" min="1" step="0.01" value="100" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-success">Пополнить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+document.getElementById('replenishModal').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('replenishName').textContent = btn.getAttribute('data-name');
+    document.getElementById('replenishForm').action = '/Materials/Replenish/' + btn.getAttribute('data-id');
+});
+</script>
+}

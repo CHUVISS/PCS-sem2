@@ -1,0 +1,144 @@
+@model IEnumerable<WorkOrder>
+@{
+    ViewData["Title"] = "Заказы";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-clipboard-check me-2"></i>Производственные заказы</h2>
+    <a href="/Orders/Create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Новый заказ</a>
+</div>
+
+<div class="mb-3 d-flex gap-2 flex-wrap">
+    <a href="/Orders" class="btn btn-sm @(ViewBag.StatusFilter == null ? "btn-dark" : "btn-outline-dark")">Все</a>
+    <a href="/Orders?status=Pending" class="btn btn-sm @(ViewBag.StatusFilter == "Pending" ? "btn-secondary" : "btn-outline-secondary")">Ожидают</a>
+    <a href="/Orders?status=InProgress" class="btn btn-sm @(ViewBag.StatusFilter == "InProgress" ? "btn-primary" : "btn-outline-primary")">В работе</a>
+    <a href="/Orders?status=Completed" class="btn btn-sm @(ViewBag.StatusFilter == "Completed" ? "btn-success" : "btn-outline-success")">Завершены</a>
+    <a href="/Orders?status=Cancelled" class="btn btn-sm @(ViewBag.StatusFilter == "Cancelled" ? "btn-danger" : "btn-outline-danger")">Отменены</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Продукт</th>
+                    <th>Кол-во</th>
+                    <th>Линия</th>
+                    <th>Статус</th>
+                    <th>Прогресс</th>
+                    <th>Срок</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td class="fw-bold text-muted">#@o.Id</td>
+                    <td>@o.Product?.Name</td>
+                    <td>@o.Quantity шт</td>
+                    <td>@if (o.ProductionLine != null) { @o.ProductionLine.Name } else { <span class="text-muted">—</span> }</td>
+                    <td>
+                        @{
+                            var (badge, label) = o.Status switch {
+                                "Pending"    => ("bg-secondary", "Ожидает"),
+                                "InProgress" => ("bg-primary",   "В работе"),
+                                "Completed"  => ("bg-success",   "Завершён"),
+                                "Cancelled"  => ("bg-danger",    "Отменён"),
+                                _            => ("bg-light text-dark", o.Status)
+                            };
+                        }
+                        <span class="badge @badge">@label</span>
+                    </td>
+                    <td style="min-width:120px">
+                        <div class="progress" style="height:18px">
+                            <div class="progress-bar @(o.Status == "Completed" ? "bg-success" : "bg-primary")"
+                                 style="width:@o.ProgressPercent%">
+                                @o.ProgressPercent%
+                            </div>
+                        </div>
+                    </td>
+                    <td class="small @(o.EstimatedEndDate < DateTime.Now && o.Status == "InProgress" ? "text-danger fw-bold" : "")">
+                        @o.EstimatedEndDate.ToString("dd.MM.yy HH:mm")
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex gap-1 justify-content-end flex-wrap">
+                            <a href="/Orders/Details/@o.Id" class="btn btn-sm btn-outline-info" title="Детали"><i class="bi bi-eye"></i></a>
+
+                            @if (o.Status == "Pending")
+                            {
+                                <form method="post" action="/Orders/Start/@o.Id" style="display:inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Запустить">
+                                        <i class="bi bi-play-fill"></i>
+                                    </button>
+                                </form>
+                            }
+                            @if (o.Status == "InProgress")
+                            {
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#progressModal" data-id="@o.Id" data-progress="@o.ProgressPercent"
+                                        title="Обновить прогресс">
+                                    <i class="bi bi-bar-chart-fill"></i>
+                                </button>
+                            }
+                            @if (o.Status != "Completed" && o.Status != "Cancelled")
+                            {
+                                <form method="post" action="/Orders/Cancel/@o.Id" style="display:inline"
+                                      onsubmit="return confirm('Отменить заказ #@o.Id?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Отменить">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="8" class="text-center text-muted py-4">Нет заказов. <a href="/Orders/Create">Создайте первый</a></td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Progress Modal -->
+<div class="modal fade" id="progressModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" id="progressForm">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title">Обновить прогресс</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Процент выполнения</label>
+                    <input type="range" name="percent" class="form-range" min="0" max="100" step="5" id="progressRange" oninput="document.getElementById('progressVal').textContent=this.value+'%'" />
+                    <div class="text-center fw-bold fs-5" id="progressVal">0%</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+document.getElementById('progressModal').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    const id = btn.getAttribute('data-id');
+    const progress = parseInt(btn.getAttribute('data-progress'));
+    document.getElementById('progressForm').action = '/Orders/UpdateProgress/' + id;
+    document.getElementById('progressRange').value = progress;
+    document.getElementById('progressVal').textContent = progress + '%';
+});
+</script>
+}

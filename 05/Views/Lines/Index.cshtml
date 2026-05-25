@@ -1,0 +1,104 @@
+@model IEnumerable<ProductionLine>
+@{
+    ViewData["Title"] = "Производственные линии";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-activity me-2"></i>Производственные линии</h2>
+    <a href="/Lines/Create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Добавить линию</a>
+</div>
+
+<div class="row g-4">
+@foreach (var line in Model)
+{
+    var isActive = line.Status == "Active";
+    var currentOrder = line.CurrentWorkOrder;
+    var pendingOrders = line.WorkOrders.Where(w => w.Status == "Pending" || w.Status == "InProgress").ToList();
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card shadow-sm h-100 border-@(isActive ? "success" : "secondary")">
+            <div class="card-header d-flex justify-content-between align-items-center bg-@(isActive ? "success" : "secondary") text-white">
+                <h6 class="mb-0"><i class="bi bi-@(isActive ? "play-circle-fill" : "stop-circle") me-2"></i>@line.Name</h6>
+                <span class="badge bg-white text-@(isActive ? "success" : "secondary")">@(isActive ? "Активна" : "Остановлена")</span>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small text-muted mb-1">
+                        <span>Коэффициент эффективности</span>
+                        <strong>@line.EfficiencyFactor.ToString("F2")×</strong>
+                    </div>
+                    <input type="range" class="form-range eff-slider" min="0.5" max="2.0" step="0.1"
+                           value="@line.EfficiencyFactor.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)"
+                           data-id="@line.Id"
+                           oninput="this.previousElementSibling.querySelector('strong').textContent = parseFloat(this.value).toFixed(2) + '×'" />
+                    <form method="post" action="/Lines/UpdateEfficiency/@line.Id" class="eff-form" data-id="@line.Id">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="efficiency" class="eff-value" value="@line.EfficiencyFactor.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)" />
+                        <button type="submit" class="btn btn-sm btn-outline-secondary mt-1 w-100">Применить коэффициент</button>
+                    </form>
+                </div>
+
+                @if (currentOrder != null)
+                {
+                    <div class="alert alert-info py-2 mb-2">
+                        <div class="small fw-bold"><i class="bi bi-cpu me-1"></i>Текущий заказ #@currentOrder.Id</div>
+                        <div class="small">@currentOrder.Product?.Name — @currentOrder.Quantity шт</div>
+                        <div class="progress mt-1" style="height:12px">
+                            <div class="progress-bar" style="width:@currentOrder.ProgressPercent%">@currentOrder.ProgressPercent%</div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-muted small mb-2"><i class="bi bi-dash-circle me-1"></i>Нет активного заказа</div>
+                }
+
+                @if (pendingOrders.Any())
+                {
+                    <div class="border rounded p-2 mb-2 small">
+                        <div class="fw-semibold mb-1">📋 Расписание:</div>
+                        @foreach (var o in pendingOrders.Take(3))
+                        {
+                            <div class="d-flex justify-content-between">
+                                <span>#@o.Id @o.Product?.Name</span>
+                                <span class="text-muted">@o.EstimatedEndDate.ToString("dd.MM HH:mm")</span>
+                            </div>
+                        }
+                        @if (pendingOrders.Count > 3)
+                        {
+                            <div class="text-muted">...и ещё @(pendingOrders.Count - 3) заказов</div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="card-footer bg-transparent">
+                <form method="post" action="/Lines/ToggleStatus/@line.Id">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn w-100 btn-@(isActive ? "outline-danger" : "outline-success")">
+                        <i class="bi bi-@(isActive ? "stop-fill" : "play-fill") me-1"></i>
+                        @(isActive ? "Остановить линию" : "Запустить линию")
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@if (!Model.Any())
+{
+    <div class="col-12 text-center text-muted py-5">
+        <i class="bi bi-exclamation-circle display-4 d-block mb-2"></i>
+        Нет производственных линий. <a href="/Lines/Create">Добавьте первую</a>
+    </div>
+}
+</div>
+
+@section Scripts {
+<script>
+document.querySelectorAll('.eff-slider').forEach(slider => {
+    slider.addEventListener('input', function() {
+        const form = this.closest('.card-body').querySelector('.eff-form');
+        form.querySelector('.eff-value').value = parseFloat(this.value).toFixed(1);
+    });
+});
+</script>
+}

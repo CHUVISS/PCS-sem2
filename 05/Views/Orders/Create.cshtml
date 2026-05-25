@@ -1,0 +1,104 @@
+@model WorkOrder
+@{
+    ViewData["Title"] = "Новый заказ";
+    var products = ViewBag.Products as IEnumerable<Product> ?? Enumerable.Empty<Product>();
+    var lines = ViewBag.Lines as IEnumerable<ProductionLine> ?? Enumerable.Empty<ProductionLine>();
+}
+
+<div class="row justify-content-center">
+<div class="col-lg-7">
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-clipboard-plus me-2"></i>Создать производственный заказ</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label asp-for="ProductId" class="form-label fw-semibold">Продукт</label>
+                <select asp-for="ProductId" class="form-select" id="productSelect" required>
+                    <option value="">— Выберите продукт —</option>
+                    @foreach (var p in products)
+                    {
+                        <option value="@p.Id" data-time="@p.ProductionTimePerUnit">@p.Name (@p.ProductionTimePerUnit мин/шт)</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Quantity" class="form-label fw-semibold">Количество (шт)</label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" id="quantityInput" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ProductionLineId" class="form-label fw-semibold">Производственная линия</label>
+                <select asp-for="ProductionLineId" class="form-select" id="lineSelect">
+                    <option value="">— Без назначения —</option>
+                    @foreach (var l in lines)
+                    {
+                        <option value="@l.Id" data-eff="@l.EfficiencyFactor.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)">
+                            @l.Name (эффективность: @l.EfficiencyFactor.ToString("F1")×)
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartDate" class="form-label fw-semibold">Дата начала</label>
+                <input asp-for="StartDate" class="form-control" type="datetime-local" id="startDate" />
+            </div>
+
+            <div class="alert alert-info d-none" id="calcResult">
+                <i class="bi bi-calculator me-2"></i>
+                <strong>Расчётное время:</strong> <span id="calcTime"></span>
+                <br><strong>Плановое завершение:</strong> <span id="calcEnd"></span>
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary flex-fill"><i class="bi bi-save me-1"></i>Создать заказ</button>
+                <a href="/Orders" class="btn btn-outline-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+@section Scripts {
+<script>
+function recalc() {
+    const productOpt = document.getElementById('productSelect').selectedOptions[0];
+    const lineOpt = document.getElementById('lineSelect').selectedOptions[0];
+    const qty = parseInt(document.getElementById('quantityInput').value) || 0;
+    const startVal = document.getElementById('startDate').value;
+
+    if (!productOpt?.value || qty < 1 || !startVal) {
+        document.getElementById('calcResult').classList.add('d-none');
+        return;
+    }
+
+    const prodTime = parseInt(productOpt.getAttribute('data-time')) || 0;
+    const eff = parseFloat(lineOpt?.getAttribute('data-eff') || '1.0');
+    const totalMins = Math.round((qty * prodTime) / eff);
+    const hours = Math.floor(totalMins / 60);
+    const mins = totalMins % 60;
+
+    const start = new Date(startVal);
+    const end = new Date(start.getTime() + totalMins * 60000);
+
+    document.getElementById('calcTime').textContent = `${hours}ч ${mins}мин (всего ${totalMins} мин)`;
+    document.getElementById('calcEnd').textContent = end.toLocaleString('ru-RU');
+    document.getElementById('calcResult').classList.remove('d-none');
+}
+
+document.getElementById('productSelect').addEventListener('change', recalc);
+document.getElementById('quantityInput').addEventListener('input', recalc);
+document.getElementById('lineSelect').addEventListener('change', recalc);
+document.getElementById('startDate').addEventListener('change', recalc);
+
+// Set default datetime
+const now = new Date();
+now.setSeconds(0, 0);
+document.getElementById('startDate').value = now.toISOString().slice(0, 16);
+</script>
+}

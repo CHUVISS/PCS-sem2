@@ -1,0 +1,90 @@
+@{
+    ViewData["Title"] = "Дашборд";
+}
+
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-speedometer2 me-2"></i>Панель управления производством</h2>
+        <p class="text-muted">Общая сводка системы</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-primary text-white">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="fs-1 fw-bold">@ViewBag.TotalOrders</div>
+                    <div>Всего заказов</div>
+                </div>
+                <i class="bi bi-clipboard-data fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-success text-white">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="fs-1 fw-bold">@ViewBag.ActiveOrders</div>
+                    <div>В производстве</div>
+                </div>
+                <i class="bi bi-play-circle fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-warning text-dark">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="fs-1 fw-bold">@ViewBag.PendingOrders</div>
+                    <div>Ожидают запуска</div>
+                </div>
+                <i class="bi bi-hourglass-split fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm @(((int)ViewBag.LowStockCount) > 0 ? "bg-danger text-white" : "bg-info text-white")">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="fs-1 fw-bold">@ViewBag.LowStockCount</div>
+                    <div>Низкий запас материалов</div>
+                </div>
+                <i class="bi bi-exclamation-triangle fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-box-seam display-4 text-primary mb-3 d-block"></i>
+                <h5>Материалы</h5>
+                <p class="text-muted">Учёт складских запасов и пополнение</p>
+                <a href="/Materials" class="btn btn-outline-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-cpu display-4 text-success mb-3 d-block"></i>
+                <h5>Продукты</h5>
+                <p class="text-muted">Каталог продуктов и нормы расхода</p>
+                <a href="/Products" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-activity display-4 text-warning mb-3 d-block"></i>
+                <h5>Производственные линии</h5>
+                <p class="text-muted">Мониторинг и управление линиями</p>
+                <a href="/Lines" class="btn btn-outline-warning">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
