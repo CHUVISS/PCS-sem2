@@ -157,7 +157,10 @@ public class OrdersApiController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto dto)
     {
-        var product = await _db.Products.FindAsync(dto.product_id);
+        var product = await _db.Products
+            .Include(p => p.ProductMaterials)
+            .ThenInclude(pm => pm.Material)
+            .FirstOrDefaultAsync(p => p.Id == dto.product_id);
         if (product == null) return BadRequest("Продукт не найден");
 
         ProductionLine? line = null;
@@ -166,6 +169,30 @@ public class OrdersApiController : ControllerBase
             line = await _db.ProductionLines.FindAsync(dto.line_id.Value);
             if (line == null) return BadRequest("Линия не найдена");
         }
+
+        // Проверяем наличие материалов
+        var missing = new List<object>();
+        foreach (var pm in product.ProductMaterials)
+        {
+            decimal needed = pm.QuantityNeeded * dto.quantity;
+            if (pm.Material!.Quantity < needed)
+            {
+                missing.Add(new
+                {
+                    material = pm.Material.Name,
+                    unit = pm.Material.UnitOfMeasure,
+                    needed,
+                    available = pm.Material.Quantity,
+                    shortage = needed - pm.Material.Quantity
+                });
+            }
+        }
+        if (missing.Count > 0)
+            return BadRequest(new { error = "Не хватает материалов", details = missing });
+
+        // Списываем материалы
+        foreach (var pm in product.ProductMaterials)
+            pm.Material!.Quantity -= pm.QuantityNeeded * dto.quantity;
 
         float efficiency = line?.EfficiencyFactor ?? 1.0f;
         double totalMinutes = (dto.quantity * product.ProductionTimePerUnit) / efficiency;
@@ -182,6 +209,29 @@ public class OrdersApiController : ControllerBase
         _db.WorkOrders.Add(order);
         await _db.SaveChangesAsync();
         return CreatedAtAction(nameof(Get), new { id = order.Id }, order);
+    }
+
+    [HttpPut("{id}/cancel")]
+    public async Task<IActionResult> Cancel(int id)
+    {
+        var order = await _db.WorkOrders.FindAsync(id);
+        if (order == null) return NotFound();
+        if (order.Status == "Completed") return BadRequest("Нельзя отменить завершённый заказ");
+        if (order.Status == "Cancelled") return BadRequest("Заказ уже отменён");
+
+        order.Status = "Cancelled";
+
+        // Освобождаем линию
+        if (order.ProductionLineId.HasValue)
+        {
+            var line = await _db.ProductionLines.FindAsync(order.ProductionLineId.Value);
+            if (line != null && line.CurrentWorkOrderId == id)
+                line.CurrentWorkOrderId = null;
+        }
+
+        // Материалы НЕ возвращаются — они списаны безвозвратно
+        await _db.SaveChangesAsync();
+        return Ok(new { order.Id, order.Status, message = "Заказ отменён. Затраченные материалы списаны." });
     }
 
     [HttpPut("{id}/progress")]

@@ -207,23 +207,53 @@ public class OrdersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(WorkOrder order)
     {
-        var product = await _db.Products.FindAsync(order.ProductId);
-        if (product == null) { ModelState.AddModelError("", "Продукт не найден"); }
+        var product = await _db.Products
+            .Include(p => p.ProductMaterials)
+            .ThenInclude(pm => pm.Material)
+            .FirstOrDefaultAsync(p => p.Id == order.ProductId);
+
+        if (product == null)
+        {
+            ModelState.AddModelError("", "Продукт не найден");
+        }
         else
         {
-            float efficiency = 1.0f;
-            if (order.ProductionLineId.HasValue)
+            // Проверяем наличие материалов
+            var missingLines = new List<string>();
+            foreach (var pm in product.ProductMaterials)
             {
-                var line = await _db.ProductionLines.FindAsync(order.ProductionLineId.Value);
-                efficiency = line?.EfficiencyFactor ?? 1.0f;
+                decimal needed = pm.QuantityNeeded * order.Quantity;
+                if (pm.Material!.Quantity < needed)
+                    missingLines.Add(
+                        $"{pm.Material.Name}: нужно {needed} {pm.Material.UnitOfMeasure}, " +
+                        $"доступно {pm.Material.Quantity}");
             }
-            double mins = (order.Quantity * product.ProductionTimePerUnit) / efficiency;
-            order.EstimatedEndDate = order.StartDate.AddMinutes(mins);
-            order.Status = "Pending";
-            _db.WorkOrders.Add(order);
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if (missingLines.Count > 0)
+            {
+                ModelState.AddModelError("", "Не хватает материалов:\n" + string.Join("\n", missingLines));
+            }
+            else
+            {
+                // Списываем материалы
+                foreach (var pm in product.ProductMaterials)
+                    pm.Material!.Quantity -= pm.QuantityNeeded * order.Quantity;
+
+                float efficiency = 1.0f;
+                if (order.ProductionLineId.HasValue)
+                {
+                    var line = await _db.ProductionLines.FindAsync(order.ProductionLineId.Value);
+                    efficiency = line?.EfficiencyFactor ?? 1.0f;
+                }
+                double mins = (order.Quantity * product.ProductionTimePerUnit) / efficiency;
+                order.EstimatedEndDate = order.StartDate.AddMinutes(mins);
+                order.Status = "Pending";
+                _db.WorkOrders.Add(order);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
         }
+
         ViewBag.Products = await _db.Products.ToListAsync();
         ViewBag.Lines = await _db.ProductionLines.Where(l => l.Status == "Active").ToListAsync();
         return View(order);

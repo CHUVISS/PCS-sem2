@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductionManagement.Data;
+using ProductionManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
         ?? "Data Source=production.db"));
+
+// Фоновый сервис автоматического обновления прогресса заказов
+builder.Services.AddHostedService<OrderProgressService>();
 
 var app = builder.Build();
 
