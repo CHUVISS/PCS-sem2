@@ -1,0 +1,226 @@
+@page "/products"
+@using BlazorClient.Models
+@using BlazorClient.Services
+@inject ProductService ProductSvc
+@inject IJSRuntime JS
+
+<h2 class="mb-4">🛒 Товары интернет-магазина</h2>
+
+@if (loading)
+{
+    <div class="d-flex justify-content-center my-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Загрузка...</span>
+        </div>
+    </div>
+}
+else
+{
+    <!-- Кнопка добавления -->
+    <button class="btn btn-success mb-3" @onclick="ShowAddForm">
+        ➕ Добавить товар
+    </button>
+
+    <!-- Форма добавления / редактирования -->
+    @if (showForm)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header fw-bold">
+                @(editProduct.Id == 0 ? "Новый товар" : $"Редактирование: {editProduct.Name}")
+            </div>
+            <div class="card-body">
+                <EditForm Model="editProduct" OnValidSubmit="SaveProduct">
+                    <DataAnnotationsValidator />
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Название</label>
+                            <InputText class="form-control" @bind-Value="editProduct.Name" placeholder="Название товара" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Категория</label>
+                            <InputText class="form-control" @bind-Value="editProduct.Category" placeholder="Категория" />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Описание</label>
+                            <InputText class="form-control" @bind-Value="editProduct.Description" placeholder="Описание" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Цена (₽)</label>
+                            <InputNumber class="form-control" @bind-Value="editProduct.Price" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Остаток</label>
+                            <InputNumber class="form-control" @bind-Value="editProduct.Stock" />
+                        </div>
+                    </div>
+                    <div class="mt-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">💾 Сохранить</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CancelForm">Отмена</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+
+    <!-- Таблица товаров -->
+    @if (products.Count == 0)
+    {
+        <div class="alert alert-info">Товаров нет. Добавьте первый!</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Название</th>
+                        <th>Категория</th>
+                        <th>Описание</th>
+                        <th class="text-end">Цена</th>
+                        <th class="text-center">Остаток</th>
+                        <th class="text-center">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in products)
+                    {
+                        <tr>
+                            <td>@p.Id</td>
+                            <td><strong>@p.Name</strong></td>
+                            <td><span class="badge bg-secondary">@p.Category</span></td>
+                            <td class="text-muted small">@p.Description</td>
+                            <td class="text-end">@p.Price.ToString("N2") ₽</td>
+                            <td class="text-center">
+                                <span class="badge @(p.Stock > 0 ? "bg-success" : "bg-danger")">
+                                    @p.Stock
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary me-1" @onclick="() => ShowEditForm(p)">
+                                    ✏️ Изменить
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => ConfirmDelete(p)">
+                                    🗑️ Удалить
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+<!-- Модальный диалог подтверждения удаления -->
+@if (showDeleteDialog)
+{
+    <div class="modal-overlay" @onclick="CancelDelete">
+        <div class="modal-dialog-custom" @onclick:stopPropagation="true">
+            <div class="card shadow-lg">
+                <div class="card-header bg-danger text-white fw-bold">
+                    ⚠️ Подтверждение удаления
+                </div>
+                <div class="card-body">
+                    <p>Вы действительно хотите удалить товар:</p>
+                    <p class="fw-bold fs-5">«@productToDelete?.Name»?</p>
+                    <p class="text-muted">Это действие нельзя отменить.</p>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button class="btn btn-secondary" @onclick="CancelDelete">Отмена</button>
+                    <button class="btn btn-danger" @onclick="DeleteConfirmed">🗑️ Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Product> products = new();
+    private bool loading = true;
+    private bool showForm = false;
+    private bool showDeleteDialog = false;
+
+    private Product editProduct = new();
+    private Product? productToDelete;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProducts();
+    }
+
+    private async Task LoadProducts()
+    {
+        loading = true;
+        try
+        {
+            products = await ProductSvc.GetAllAsync();
+        }
+        catch
+        {
+            products = new();
+        }
+        loading = false;
+    }
+
+    private void ShowAddForm()
+    {
+        editProduct = new Product();
+        showForm = true;
+    }
+
+    private void ShowEditForm(Product p)
+    {
+        // Копируем чтобы не менять исходный объект
+        editProduct = new Product
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Price = p.Price,
+            Stock = p.Stock,
+            Category = p.Category
+        };
+        showForm = true;
+    }
+
+    private void CancelForm()
+    {
+        showForm = false;
+        editProduct = new Product();
+    }
+
+    private async Task SaveProduct()
+    {
+        if (editProduct.Id == 0)
+            await ProductSvc.CreateAsync(editProduct);
+        else
+            await ProductSvc.UpdateAsync(editProduct);
+
+        showForm = false;
+        await LoadProducts();
+    }
+
+    private void ConfirmDelete(Product p)
+    {
+        productToDelete = p;
+        showDeleteDialog = true;
+    }
+
+    private void CancelDelete()
+    {
+        showDeleteDialog = false;
+        productToDelete = null;
+    }
+
+    private async Task DeleteConfirmed()
+    {
+        if (productToDelete is not null)
+        {
+            await ProductSvc.DeleteAsync(productToDelete.Id);
+            showDeleteDialog = false;
+            productToDelete = null;
+            await LoadProducts();
+        }
+    }
+}

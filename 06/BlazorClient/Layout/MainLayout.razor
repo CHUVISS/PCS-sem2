@@ -1,0 +1,44 @@
+@inherits LayoutComponentBase
+@using BlazorClient.Services
+@inject ThemeService Theme
+@implements IDisposable
+
+<div class="page @Theme.ThemeClass">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4 d-flex align-items-center justify-content-end gap-3">
+            <span class="small text-muted">@(Theme.IsDark ? "🌙 Тёмная тема" : "☀️ Светлая тема")</span>
+            <div class="form-check form-switch mb-0">
+                <input class="form-check-input" type="checkbox" role="switch"
+                       id="themeSwitch"
+                       checked="@Theme.IsDark"
+                       @onchange="ToggleTheme" />
+                <label class="form-check-label" for="themeSwitch"></label>
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Theme.OnChange += StateHasChanged;
+    }
+
+    private void ToggleTheme()
+    {
+        Theme.Toggle();
+    }
+
+    public void Dispose()
+    {
+        Theme.OnChange -= StateHasChanged;
+    }
+}
